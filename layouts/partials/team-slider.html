@@ -1,0 +1,87 @@
+<section id="team" class="container mx-auto px-4 py-12">
+  <h3 class="text-2xl font-semibold mb-6">Наша команда</h3>
+
+  <div class="relative">
+    <!-- Prev/Next buttons -->
+    <button aria-label="Prev" id="team-prev" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow p-2 hidden md:inline-flex">
+      ‹
+    </button>
+    <button aria-label="Next" id="team-next" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full shadow p-2 hidden md:inline-flex">
+      ›
+    </button>
+
+    <!-- Scrollable container — центрируем содержимое -->
+    <div id="team-scroll" class="flex gap-6 overflow-x-auto no-scrollbar py-2 px-2 scroll-smooth justify-start md:justify-center items-stretch">
+      {{ $team := site.Data.team }}
+      {{ range $team }}
+        <div class="snap-start flex-shrink-0 flex justify-center">
+          {{ partial "team-member.html" . }}
+        </div>
+      {{ end }}
+    </div>
+</section>
+
+<style>
+/* optional: hide scrollbar but keep scrollable */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@media (min-width:768px){
+  /* ensure snap works nicely on larger screens */
+  #team-scroll { scroll-snap-type: x mandatory; padding-bottom: 8px; }
+}
+
+/* Центрирование содержимого внутри скролл-контейнера */
+#team-scroll {
+  scroll-snap-type: x mandatory;
+  display: flex;
+  justify-content: center; /* центрирует при недостатке ширины */
+  gap: 1.5rem;
+  padding-bottom: 8px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Каждый слайд — flex контейнер, чтобы карточка была по центру ячейки */
+#team-scroll > div {
+  display: flex;
+  justify-content: center;
+  scroll-snap-align: center;
+}
+
+/* На очень широких экранах не даём карточкам растягиваться слишком далеко */
+@media (min-width: 1024px) {
+  #team-scroll { padding-left: 2rem; padding-right: 2rem; }
+}
+</style>
+
+<script>
+(function(){
+  const scroller = document.getElementById('team-scroll');
+  const btnNext = document.getElementById('team-next');
+  const btnPrev = document.getElementById('team-prev');
+  if(!scroller) return;
+
+  const cardWidth = () => {
+    const card = scroller.querySelector('div > *');
+    if(!card) return scroller.clientWidth * 0.8;
+    return card.getBoundingClientRect().width + parseFloat(getComputedStyle(scroller).gap || 16);
+  };
+
+  btnNext?.addEventListener('click', ()=> scroller.scrollBy({ left: cardWidth(), behavior: 'smooth' }));
+  btnPrev?.addEventListener('click', ()=> scroller.scrollBy({ left: -cardWidth(), behavior: 'smooth' }));
+
+  // show/hide buttons based on overflow
+  const updateButtons = ()=>{
+    if(!btnNext || !btnPrev) return;
+    const isOverflowing = scroller.scrollWidth > scroller.clientWidth + 1;
+    btnNext.style.display = isOverflowing ? 'inline-flex' : 'none';
+    btnPrev.style.display = isOverflowing ? 'inline-flex' : 'none';
+  };
+  window.addEventListener('resize', updateButtons);
+  updateButtons();
+})();
+</script>

@@ -1,0 +1,234 @@
+<section id="gallery" class="container mx-auto px-4 py-12">
+  <div class="max-w-5xl mx-auto">
+    <h3 class="text-2xl font-semibold mb-4">Фотографии центра</h3>
+    <p class="text-gray-700 mb-6">Короткая лёгкая подборка интерьеров — быстрые миниатюры и лёгкий просмотр на полный экран.</p>
+
+    <!-- Grid 3x3 (first 9 shown); remaining images hidden in accordion -->
+    <div class="grid grid-cols-3 gap-3" id="gallery-grid">
+      {{ $total := 20 }}
+      {{ range $i := seq 1 $total }}
+        {{ $idx := sub $i 1 }}
+        {{ if lt $idx 9 }}
+          <button type="button"
+                  class="overflow-hidden rounded-lg bg-gray-100 group relative"
+                  data-index="{{ $idx }}"
+                  data-src="/images/center/{{ $i }}.jpg">
+            <img src="/images/center/{{ $i }}.jpg"
+                 alt="Фотография центра {{ $i }}"
+                 class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105"
+                 loading="lazy" width="400" height="300">
+            {{ if eq $idx 8 }}
+              {{ $more := sub $total 9 }}
+              {{ if gt $more 0 }}
+                <div class="overlay absolute inset-0 bg-black/40 flex items-center justify-center text-white text-lg font-semibold pointer-events-none">+{{ $more }}</div>
+              {{ end }}
+            {{ end }}
+          </button>
+        {{ end }}
+      {{ end }}
+    </div>
+
+    <!-- Hidden accordion with remaining thumbs -->
+    <div id="gallery-accordion-wrap" class="mt-3">
+      <div id="gallery-accordion" class="grid grid-cols-3 gap-3 hidden">
+        {{ range $i := seq 10 $total }}
+          {{ $idx := sub $i 1 }}
+          <button type="button"
+                  class="overflow-hidden rounded-lg bg-gray-100 group relative"
+                  data-index="{{ $idx }}"
+                  data-src="/images/center/{{ $i }}.jpg">
+            <img src="/images/center/{{ $i }}.jpg"
+                 alt="Фотография центра {{ $i }}"
+                 class="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105"
+                 loading="lazy" width="400" height="300">
+          </button>
+        {{ end }}
+      </div>
+
+    <!-- Collapse button (shown only when accordion open) -->
+    <div id="gallery-collapse-wrap" class="mt-3 hidden justify-center">
+      <button id="gallery-collapse-btn" type="button" aria-label="Свернуть галерею"
+              class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-200 hover:bg-gray-300 text-gray-700 shadow">
+        <!-- larger arrow up icon -->
+        <svg class="w-7 h-7 transform transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M6 15l6-6 6 6"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal (lightbox) -->
+    <div id="gallery-modal" class="fixed inset-0 z-50 hidden bg-black/80 p-4">
+      <button id="gallery-close" class="absolute top-4 right-4 text-white bg-black/30 rounded-full p-2" aria-label="Закрыть">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+
+      <button id="gallery-prev" class="absolute left-4 top-1/2 -translate-y-1/2 text-white bg-black/30 rounded-full p-2 hidden md:inline-flex" aria-label="Предыдущая">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+
+      <!-- Centered container: single flex element to ensure image is centered -->
+      <div class="flex-1 flex items-center justify-center">
+        <img id="gallery-modal-img" src="" alt="" class="max-w-full max-h-[80vh] object-contain rounded shadow" />
+      </div>
+
+      <button id="gallery-next" class="absolute right-4 top-1/2 -translate-y-1/2 text-white bg-black/30 rounded-full p-2 hidden md:inline-flex" aria-label="Следующая">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <style>
+      /* show modal with flex when active */
+      #gallery-modal.show { display: flex; align-items: center; justify-content: center; }
+      /* ensure modal inner img is centered and not stuck to top-left */
+      #gallery-modal .flex-1 { display: flex; align-items: center; justify-content: center; width: 100%; }
+      /* smooth accordion open/close (height transition requires explicit heights; use max-height) */
+      #gallery-accordion.transitioning { overflow: hidden; transition: max-height 300ms ease; }
+      /* hide overlay when accordion is open */
+      #gallery-grid .overlay.hidden-when-open { display: none; }
+    </style>
+
+    <script>
+    (function(){
+      const total = 20;
+      const imgs = Array.from({length: total}, (_, i) => `/images/center/${i+1}.jpg`);
+
+      const grid = document.getElementById('gallery-grid');
+      const overlayTile = grid.querySelector('.overlay');
+      const accordion = document.getElementById('gallery-accordion');
+      const accordionWrap = document.getElementById('gallery-accordion-wrap');
+      const collapseWrap = document.getElementById('gallery-collapse-wrap');
+      const collapseBtn = document.getElementById('gallery-collapse-btn');
+      const modal = document.getElementById('gallery-modal');
+      const modalImg = document.getElementById('gallery-modal-img');
+      const btnClose = document.getElementById('gallery-close');
+      const btnPrev = document.getElementById('gallery-prev');
+      const btnNext = document.getElementById('gallery-next');
+
+      const thumbsVisible = Array.from(grid.querySelectorAll('button[data-src]'));
+      const thumbsHidden = Array.from(accordion.querySelectorAll('button[data-src]'));
+
+      let current = 0;
+
+      // Open modal at index
+      const openAt = (idx) => {
+        current = ((idx % imgs.length) + imgs.length) % imgs.length;
+        modalImg.src = imgs[current];
+        modalImg.alt = `Фотография центра ${current + 1}`;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+        if(imgs.length > 1) { btnPrev.classList.remove('hidden'); btnNext.classList.remove('hidden'); } else { btnPrev.classList.add('hidden'); btnNext.classList.add('hidden'); }
+        preload((current + 1) % imgs.length);
+        preload((current - 1 + imgs.length) % imgs.length);
+      };
+
+      const close = () => {
+        modal.classList.remove('show');
+        modalImg.src = '';
+        document.body.style.overflow = '';
+      };
+
+      const preload = (i) => { const im = new Image(); im.src = imgs[i]; };
+
+      // Attach click handlers for visible thumbs
+      thumbsVisible.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(btn.getAttribute('data-index'), 10);
+          // if this is the "+N" tile (index 8) toggle accordion
+          if(idx === 8 && accordion && accordion.children.length > 0) {
+            if(accordion.classList.contains('open')) {
+              collapseAccordion();
+            } else {
+              expandAccordion();
+            }
+            return;
+          }
+          openAt(idx);
+        });
+      });
+
+      // Attach click handlers for hidden thumbs (open modal)
+      thumbsHidden.forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(btn.getAttribute('data-index'), 10);
+          openAt(idx);
+        });
+      });
+
+      // Collapse button handler
+      collapseBtn.addEventListener('click', () => {
+        collapseAccordion();
+      });
+
+      // Modal controls
+      btnClose.addEventListener('click', close);
+      modal.addEventListener('click', (e) => {
+        if(e.target === modal) close();
+      });
+      btnPrev.addEventListener('click', (e) => { e.stopPropagation(); openAt(current - 1); });
+      btnNext.addEventListener('click', (e) => { e.stopPropagation(); openAt(current + 1); });
+
+      // Keyboard
+      document.addEventListener('keydown', (e) => {
+        if(!modal.classList.contains('show')) return;
+        if(e.key === 'Escape') close();
+        if(e.key === 'ArrowLeft') openAt(current - 1);
+        if(e.key === 'ArrowRight') openAt(current + 1);
+      });
+
+      // Touch swipe
+      let touchStartX = 0;
+      modalImg.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; });
+      modalImg.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if(Math.abs(dx) > 50) {
+          if(dx > 0) openAt(current - 1); else openAt(current + 1);
+        }
+      });
+
+      // Accordion helpers: animate via max-height
+      function expandAccordion() {
+        // hide overlay on the +N tile
+        if(overlayTile) overlayTile.classList.add('hidden-when-open');
+
+        accordion.classList.add('transitioning');
+        accordion.classList.add('open');
+        accordion.classList.remove('hidden');
+        // show collapse button
+        collapseWrap.classList.remove('hidden');
+
+        // compute target height
+        accordion.style.maxHeight = '0px';
+        requestAnimationFrame(() => {
+          const full = accordion.scrollHeight + 'px';
+          accordion.style.maxHeight = full;
+          setTimeout(() => {
+            accordion.classList.remove('transitioning');
+            accordion.style.maxHeight = '';
+          }, 320);
+        });
+      }
+
+      function collapseAccordion() {
+        // restore overlay on the +N tile
+        if(overlayTile) overlayTile.classList.remove('hidden-when-open');
+
+        accordion.classList.add('transitioning');
+        const full = accordion.scrollHeight + 'px';
+        accordion.style.maxHeight = full;
+        requestAnimationFrame(() => {
+          accordion.style.maxHeight = '0px';
+        });
+        setTimeout(() => {
+          accordion.classList.remove('transitioning');
+          accordion.classList.remove('open');
+          accordion.classList.add('hidden');
+          accordion.style.maxHeight = '';
+          // hide collapse button
+          collapseWrap.classList.add('hidden');
+        }, 320);
+      }
+
+    })();
+    </script>
+  </div>
+</section>

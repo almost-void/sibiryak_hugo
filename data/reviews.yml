@@ -1,0 +1,41 @@
+- name: "Иван П." 
+  role: "Пациент"
+  photo: "/images/rev-ivan.jpg"
+  rating: 5
+  quote: "Спасибо центру — вернули мне жизнь и семью."
+  date: "Июль 2025"
+
+- name: "Анна С."
+  role: "Родственница"
+  photo: "/images/rev-anna.jpg"
+  rating: 5
+  quote: "Команда профессионалов, внимательное отношение и результат."
+  date: "Май 2025"
+
+- name: "Сергей К."
+  role: "Пациент"
+  photo: "/images/rev-sergey.jpg"
+  rating: 4
+  quote: "Тяжёлый путь, но сотрудники помогли пройти его шаг за шагом."
+  date: "Март 2025"
+
+- name: "Семефы К."
+  role: "Пациент"
+  photo: "/images/rev-sergey.jpg"
+  rating: 4
+  quote: "Тяжёлый путь, но сотрудники помогли пройти его шаг за шагом."
+  date: "Март 2025"
+
+- name: "Иван П." 
+  role: "Пациент"
+  photo: "/images/rev-ivan.jpg"
+  rating: 5
+  quote: "Спасибо центру — вернули мне жизнь и семью."
+  date: "Июль 2025"
+
+- name: "Анна С."
+  role: "Родственница"
+  photo: "/images/rev-anna.jpg"
+  rating: 5
+  quote: "Команда профессионалов, внимательное отношение и результат."
+  date: "Май 2025"

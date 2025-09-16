@@ -1,0 +1,10 @@
+*.tar.gz
+*.md
+*.sh
+archetypes/
+assets/
+i18n/
+public/
+static/
+themes/
+

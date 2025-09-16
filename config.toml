@@ -1,0 +1,6 @@
+baseURL = "https://example.org/"
+languageCode = "ru"
+title = "Страна против наркотиков"
+theme = ""
+[params]
+  description = "Помощь и профилактика"

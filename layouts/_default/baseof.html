@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    {{ partial "head.html" . }}
+  </head>
+  <body class="bg-gray-200 text-gray-900 antialiased">
+    {{ partial "header.html" . }}
+    <main>
+      {{ block "main" . }}{{ end }}
+    </main>
+    {{ partial "footer.html" . }}
+    {{ partial "consultation-modal.html" . }}
+  </body>
+</html>

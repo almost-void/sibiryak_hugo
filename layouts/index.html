@@ -1,0 +1,68 @@
+{{ define "main" }}
+
+<section class="bg-[url('/images/hero.jpg')] bg-cover bg-center">
+  <div class="bg-black/50">
+    <div class="container mx-auto px-4 py-16 md:py-28 text-white">
+      <div class="max-w-3xl">
+        <h2 class="text-3xl md:text-5xl font-bold leading-tight">Эффективное лечение наркомании и алкоголизма</h2>
+        <p class="mt-4 text-lg md:text-xl text-gray-100/90">Помогаем людям и семьям справиться с зависимостью, поддерживаем профилактические программы и информационные кампании.</p>
+        <div class="mt-6 flex gap-3">
+          <a href="#services" class="bg-accent text-black px-5 py-3 rounded font-semibold">Узнать больше</a>
+          <a href="#contacts" class="border border-white px-5 py-3 rounded">Связаться</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about" class="container mx-auto px-4 py-12">
+  <div class="grid md:grid-cols-2 gap-8 items-center">
+    <div>
+      <h3 class="text-2xl font-semibold">О центре</h3>
+      <p class="mt-4 text-gray-700">Мы занимаемся профилактикой, лечением и поддержкой людей, столкнувшихся с наркозависимостью. Наши программы включают консультации, реабилитацию и образовательные мероприятия.</p>
+      <ul class="mt-4 space-y-2 text-gray-700">
+        <li>• Консультации специалистов</li>
+        <li>• Программы реабилитации</li>
+        <li>• Информационные кампании</li>
+      </ul>
+    </div>
+    <div>
+      <img src="{{ "images/about.jpg" | relURL }}" alt="О проекте" class="rounded shadow">
+    </div>
+  </div>
+</section>
+
+{{ partial "what-we-do.html" . }}
+
+{{ partial "team-slider.html" . }}
+
+{{ partial "reviews-slider.html" . }}
+
+{{ partial "rehab-cards.html" . }}
+
+{{ partial "gallery.html" . }}
+
+<section id="contacts" class="bg-gray-50 border-t">
+  <div class="container mx-auto px-4 py-12 grid md:grid-cols-2 gap-8">
+    <div>
+      <h3 class="text-2xl font-semibold">Контакты</h3>
+      <p class="mt-4 text-gray-700">Телефон: <a href="tel:+71234567890" class="text-primary">+7 (123) 456-78-90</a></p>
+      <p class="mt-2 text-gray-700">E‑mail: <a href="mailto:info@example.com" class="text-primary">info@example.com</a></p>
+      <div class="mt-4">
+        <h4 class="font-medium">Адрес</h4>
+        <p class="text-gray-600">г. Москва, ул. Примерная, 1</p>
+      </div>
+    </div>
+
+    <div>
+      <h3 class="text-2xl font-semibold">Форма связи</h3>
+      <form action="/contact" method="post" class="mt-4 space-y-3">
+        <input name="name" type="text" placeholder="Имя" class="w-full p-3 rounded border" required>
+        <input name="email" type="email" placeholder="E‑mail" class="w-full p-3 rounded border" required>
+        <textarea name="message" rows="4" placeholder="Сообщение" class="w-full p-3 rounded border" required></textarea>
+        <button type="submit" class="bg-primary text-white px-4 py-2 rounded">Отправить</button>
+      </form>
+    </div>
+  </div>
+</section>
+{{ end }}

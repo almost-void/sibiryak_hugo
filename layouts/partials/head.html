@@ -1,0 +1,19 @@
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>{{ with .Title }}{{ . }} — {{ end }}{{ .Site.Title }}</title>
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" />
+<!-- Tailwind via CDN (latest) -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#0057b8',
+          accent: '#f59e0b'
+        }
+      }
+    }
+  }
+</script>
+<meta name="description" content="{{ with .Params.description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
