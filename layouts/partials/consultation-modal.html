@@ -1,12 +1,11 @@
 <div id="consultationModal" class="fixed inset-0 hidden z-50">
   <!-- затемнение -->
-  <div id="modalOverlay" 
-       onclick="toggleConsultationModal()" 
-       class="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"></div>
+  <div id="modalOverlay" onclick="toggleConsultationModal()"
+    class="absolute inset-0 bg-black bg-opacity-50 opacity-0 transition-opacity duration-300"></div>
 
   <!-- контент -->
-  <div id="modalContent" 
-       class="relative flex items-center justify-center min-h-screen opacity-0 scale-95 transform transition-all duration-300">
+  <div id="modalContent"
+    class="relative flex items-center justify-center min-h-screen opacity-0 scale-95 transform transition-all duration-300">
     <div class="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 relative">
       <!-- Закрыть -->
       <button onclick="toggleConsultationModal()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
@@ -17,8 +16,10 @@
 
       <!-- Tabs -->
       <div class="flex space-x-2 mb-4">
-        <button onclick="showTab('form')" id="tab-form" class="flex-1 py-2 px-4 text-center bg-indigo-600 text-white rounded-lg">Форма</button>
-        <button onclick="showTab('contact')" id="tab-contact" class="flex-1 py-2 px-4 text-center bg-gray-200 rounded-lg">Связаться</button>
+        <button onclick="showTab('form')" id="tab-form"
+          class="flex-1 py-2 px-4 text-center bg-indigo-600 text-white rounded-lg">Форма</button>
+        <button onclick="showTab('contact')" id="tab-contact"
+          class="flex-1 py-2 px-4 text-center bg-gray-200 rounded-lg">Связаться</button>
       </div>
 
       <!-- Форма -->
@@ -27,17 +28,18 @@
         <form class="space-y-3">
           <div>
             <label class="block text-sm font-medium">Имя*</label>
-            <input type="text" required class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500"/>
+            <input type="text" required class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div>
             <label class="block text-sm font-medium">Телефон*</label>
-            <input type="tel" required class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500"/>
+            <input type="tel" required class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div>
             <label class="block text-sm font-medium">Ваш вопрос</label>
             <textarea class="w-full border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-500"></textarea>
           </div>
-          <button type="submit" class="w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Отправить</button>
+          <button type="submit"
+            class="w-full py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700">Отправить</button>
         </form>
       </div>
 
@@ -45,9 +47,12 @@
       <div id="tabContent-contact" class="hidden">
         <p class="text-sm mb-3 text-gray-600">Выберите удобный способ связи:</p>
         <div class="flex flex-col space-y-2">
-          <a href="tel:+79998887766" class="w-full py-2 bg-green-600 text-white rounded-lg text-center hover:bg-green-700">📞 Позвонить</a>
-          <a href="https://t.me/yourusername" target="_blank" class="w-full py-2 bg-blue-500 text-white rounded-lg text-center hover:bg-blue-600">💬 Telegram</a>
-          <a href="https://wa.me/79998887766" target="_blank" class="w-full py-2 bg-green-500 text-white rounded-lg text-center hover:bg-green-600">💬 WhatsApp</a>
+          <a href="tel:+79998887766"
+            class="w-full py-2 bg-green-600 text-white rounded-lg text-center hover:bg-green-700">📞 Позвонить</a>
+          <a href="https://t.me/yourusername" target="_blank"
+            class="w-full py-2 bg-blue-500 text-white rounded-lg text-center hover:bg-blue-600">💬 Telegram</a>
+          <a href="https://wa.me/79998887766" target="_blank"
+            class="w-full py-2 bg-green-500 text-white rounded-lg text-center hover:bg-green-600">💬 WhatsApp</a>
         </div>
       </div>
     </div>
@@ -55,53 +60,53 @@
 </div>
 
 <script>
-function toggleConsultationModal() {
-  const modal = document.getElementById('consultationModal');
-  const overlay = document.getElementById('modalOverlay');
-  const content = document.getElementById('modalContent');
-  const body = document.body;
-
-  if (modal.classList.contains('hidden')) {
-    modal.classList.remove('hidden');
-    setTimeout(() => {
-      overlay.classList.add('opacity-100');
-      content.classList.add('opacity-100', 'scale-100');
-      content.classList.remove('opacity-0', 'scale-95');
-      body.classList.add('overflow-hidden'); // блокируем прокрутку
-      // autofocus
-      const nameInput = modal.querySelector('input[type="text"]');
-      if (nameInput) nameInput.focus();
-    }, 10);
-  } else {
-    overlay.classList.remove('opacity-100');
-    content.classList.remove('opacity-100', 'scale-100');
-    content.classList.add('opacity-0', 'scale-95');
-    body.classList.remove('overflow-hidden'); // возвращаем прокрутку
-    setTimeout(() => {
-      modal.classList.add('hidden');
-    }, 300);
-  }
-}
-
-function showTab(tab) {
-  const tabs = ['form', 'contact'];
-  tabs.forEach(t => {
-    document.getElementById('tabContent-' + t).classList.add('hidden');
-    document.getElementById('tab-' + t).classList.remove('bg-indigo-600', 'text-white');
-    document.getElementById('tab-' + t).classList.add('bg-gray-200');
-  });
-  document.getElementById('tabContent-' + tab).classList.remove('hidden');
-  document.getElementById('tab-' + tab).classList.remove('bg-gray-200');
-  document.getElementById('tab-' + tab).classList.add('bg-indigo-600', 'text-white');
-}
-
-// закрытие по Esc
-document.addEventListener('keydown', function(event) {
-  if (event.key === "Escape") {
+  function toggleConsultationModal() {
     const modal = document.getElementById('consultationModal');
-    if (modal && !modal.classList.contains('hidden')) {
-      toggleConsultationModal();
+    const overlay = document.getElementById('modalOverlay');
+    const content = document.getElementById('modalContent');
+    const body = document.body;
+
+    if (modal.classList.contains('hidden')) {
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        overlay.classList.add('opacity-100');
+        content.classList.add('opacity-100', 'scale-100');
+        content.classList.remove('opacity-0', 'scale-95');
+        body.classList.add('overflow-hidden'); // блокируем прокрутку
+        // autofocus
+        const nameInput = modal.querySelector('input[type="text"]');
+        if (nameInput) nameInput.focus();
+      }, 10);
+    } else {
+      overlay.classList.remove('opacity-100');
+      content.classList.remove('opacity-100', 'scale-100');
+      content.classList.add('opacity-0', 'scale-95');
+      body.classList.remove('overflow-hidden'); // возвращаем прокрутку
+      setTimeout(() => {
+        modal.classList.add('hidden');
+      }, 300);
     }
   }
-});
+
+  function showTab(tab) {
+    const tabs = ['form', 'contact'];
+    tabs.forEach(t => {
+      document.getElementById('tabContent-' + t).classList.add('hidden');
+      document.getElementById('tab-' + t).classList.remove('bg-indigo-600', 'text-white');
+      document.getElementById('tab-' + t).classList.add('bg-gray-200');
+    });
+    document.getElementById('tabContent-' + tab).classList.remove('hidden');
+    document.getElementById('tab-' + tab).classList.remove('bg-gray-200');
+    document.getElementById('tab-' + tab).classList.add('bg-indigo-600', 'text-white');
+  }
+
+  // закрытие по Esc
+  document.addEventListener('keydown', function (event) {
+    if (event.key === "Escape") {
+      const modal = document.getElementById('consultationModal');
+      if (modal && !modal.classList.contains('hidden')) {
+        toggleConsultationModal();
+      }
+    }
+  });
 </script>

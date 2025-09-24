@@ -1,0 +1,39 @@
+{{- $name := . -}}
+
+{{ if eq $name "consulting" }}
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <path d="M12 20c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 2.114 1.043 4.01 2.707 5.336L4 20l3.5-1h1.11C9.9 19.68 10.932 20 12 20z"/>
+</svg>
+
+{{ else if eq $name "motivation" }}
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <path d="M9 18h6m-3-15a6 6 0 0 1 6 6c0 2.21-1.343 4.162-3 5v2H9v-2c-1.657-.838-3-2.79-3-5a6 6 0 0 1 6-6z"/>
+  <line x1="9" y1="22" x2="15" y2="22"/>
+</svg>
+
+{{ else if eq $name "escort" }}
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <circle cx="12" cy="7" r="4"/>
+  <path d="M6 21v-2a4 4 0 0 1 4-4h4"/>
+  <path d="M17 16l4 4-4 4"/>
+</svg>
+
+{{ else if eq $name "house" }}
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V9.5z"/>
+</svg>
+
+{{ else if eq $name "community" }}
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <circle cx="8" cy="8" r="3"/>
+  <circle cx="16" cy="8" r="3"/>
+  <path d="M2 21v-2a4 4 0 0 1 4-4h4"/>
+  <path d="M14 15h2a4 4 0 0 1 4 4v2"/>
+</svg>
+
+{{ else if eq $name "support" }}
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <path d="M12 21s-6.5-4.35-6.5-9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 6.5 4.5c0 5.15-6.5 9.5-6.5 9.5z"/>
+  <path d="M4 17h5l1.5 2H20"/>
+</svg>
+{{ end }}

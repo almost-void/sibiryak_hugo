@@ -1,31 +1,55 @@
-<div class="max-w-6xl mx-auto px-6 py-12">
-  <h2 class="text-3xl font-bold mb-10 text-center">Этапы реабилитации</h2>
+<section id="rehab-cards" class="py-16 bg-gray-50">
+  <div class="container mx-auto px-6 max-w-5xl"> 
+    <h2 class="text-3xl font-bold text-center mb-12">Этапы реабилитации</h2>
 
-  <!-- Карточки -->
-  <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-    {{ range site.Data.rehab.steps }}
-      <div class="p-6 bg-white rounded-2xl shadow-md hover:shadow-lg transition flex flex-col">
-        <!-- Иконка и заголовок -->
-        <div class="flex items-center gap-4 mb-4">
-          {{ partial "rehab-icon.html" .icon }}
-          <h3 class="text-xl font-semibold text-gray-800">{{ .title }}</h3>
+    <div class="grid gap-12 md:gap-16">
+      {{ range $index, $step := site.Data.rehab.steps }}
+      <div class="flex flex-col items-center md:flex-row 
+                  {{ if modBool $index 2 }} md:flex-row-reverse {{ end }}
+                  opacity-0 translate-y-8 transition-all duration-700 ease-out card-step">
+
+        <!-- Иконка -->
+        <div class="flex-shrink-0 flex items-center justify-center w-20 h-20 rounded-full bg-indigo-100">
+          {{ partial "steps-icons.html" $step.icon }}
         </div>
 
-        <!-- Краткое описание -->
-        <p class="text-gray-600 flex-grow">{{ .excerpt }}</p>
+        <!-- Карточка -->
+        <div class="bg-white p-6 rounded-2xl shadow w-full md:w-1/2 mt-6 md:mt-0 md:mx-6 text-center md:text-left">
+          <h3 class="text-xl font-semibold mb-3">{{ $step.title }}</h3>
+          <p class="text-gray-600 text-sm">{{ $step.excerpt }}</p>
+        </div>
       </div>
-    {{ end }}
-  </div>
+      {{ end }}
+    </div>
 
-  <!-- Две кнопки внизу -->
-  <div class="mt-12 flex justify-center gap-6">
-    <a href="/rehab-steps.html"
-       class="px-6 py-3 bg-indigo-600 text-white font-medium rounded-xl shadow hover:bg-indigo-700 transition">
-       Узнать подробнее
-    </a>
-    <a href="/contact"
-       class="px-6 py-3 bg-green-600 text-white font-medium rounded-xl shadow hover:bg-green-700 transition">
-       Бесплатная консультация
-    </a>
+    <!-- Кнопки -->
+    <div class="mt-16 flex flex-col sm:flex-row justify-center gap-6">
+      <a href="/rehab-steps" 
+         class="px-8 py-4 bg-indigo-600 text-white rounded-2xl shadow hover:bg-indigo-700 transition">
+        Узнать подробнее
+      </a>
+      <a href="/contact" 
+         class="px-8 py-4 bg-emerald-600 text-white rounded-2xl shadow hover:bg-emerald-700 transition">
+        Бесплатная консультация
+      </a>
+    </div>
   </div>
-</div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const steps = document.querySelectorAll(".card-step");
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, i) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            entry.target.classList.remove("opacity-0", "translate-y-8");
+            entry.target.classList.add("opacity-100", "translate-y-0");
+          }, i * 200); // задержка между карточками
+        }
+      });
+    }, {threshold: 0.2});
+
+    steps.forEach(step => observer.observe(step));
+  });
+</script>

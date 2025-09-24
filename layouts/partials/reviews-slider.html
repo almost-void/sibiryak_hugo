@@ -1,91 +1,154 @@
-<section id="reviews" class="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-12">
+<section
+  id="reviews"
+  class="bg-gradient-to-r from-gray-900 to-gray-800 text-white py-12"
+>
   <div class="container mx-auto px-4">
     <h3 class="text-2xl font-semibold mb-6 text-white">Отзывы</h3>
 
     <div class="relative">
       <!-- Prev/Next -->
-      <button aria-label="Prev review" id="rev-prev" class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 hidden md:inline-flex">
+      <button
+        aria-label="Prev review"
+        id="rev-prev"
+        class="absolute left-0 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 hidden md:inline-flex"
+      >
         ‹
       </button>
-      <button aria-label="Next review" id="rev-next" class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 hidden md:inline-flex">
+      <button
+        aria-label="Next review"
+        id="rev-next"
+        class="absolute right-0 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 hidden md:inline-flex"
+      >
         ›
       </button>
 
       <!-- Scroll container -->
-      <div id="rev-scroll" class="flex gap-6 overflow-x-auto no-scrollbar py-4 px-3 scroll-smooth items-stretch">
-        {{ $reviews := site.Data.reviews }}
-        {{ range $reviews }}
-          <div class="snap-start flex-shrink-0 flex justify-center">
-            {{ partial "review-card.html" . }}
-          </div>
+      <div
+        id="rev-scroll"
+        class="flex gap-6 overflow-x-auto no-scrollbar py-4 px-3 scroll-smooth items-stretch"
+      >
+        {{ $reviews := site.Data.reviews }} {{ range $reviews }}
+        <div class="snap-start flex-shrink-0 flex justify-center">
+          {{ partial "review-card.html" . }}
+        </div>
         {{ end }}
       </div>
+    </div>
+    <div class="mt-6 text-center">
+      <a
+        href="/reviews.html"
+        class="inline-block bg-white/10 hover:bg-white/20 text-white px-4 py-2 rounded-lg"
+      >
+        Все отзывы →
+      </a>
     </div>
   </div>
 
   <style>
     /* hide scrollbar while allowing scroll */
-    #rev-scroll.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    #rev-scroll.no-scrollbar::-webkit-scrollbar { display: none; }
-
-    @media (min-width:768px){
-      #rev-scroll { scroll-snap-type: x mandatory; padding-bottom: 8px; }
+    #rev-scroll.no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
     }
-    #rev-scroll { scroll-snap-type: x mandatory; display:flex; gap:1.5rem; padding-left:1rem; padding-right:1rem; }
-    #rev-scroll > div { display:flex; justify-content:center; scroll-snap-align:center; }
+    #rev-scroll.no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    @media (min-width: 768px) {
+      #rev-scroll {
+        scroll-snap-type: x mandatory;
+        padding-bottom: 8px;
+      }
+    }
+    #rev-scroll {
+      scroll-snap-type: x mandatory;
+      display: flex;
+      gap: 1.5rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+    }
+    #rev-scroll > div {
+      display: flex;
+      justify-content: center;
+      scroll-snap-align: center;
+    }
   </style>
 
   <script>
-  (function(){
-    const scroller = document.getElementById('rev-scroll');
-    const next = document.getElementById('rev-next');
-    const prev = document.getElementById('rev-prev');
-    if(!scroller) return;
+    (function () {
+      const scroller = document.getElementById("rev-scroll");
+      const next = document.getElementById("rev-next");
+      const prev = document.getElementById("rev-prev");
+      if (!scroller) return;
 
-    const cardWidth = () => {
-      const card = scroller.querySelector('div > *');
-      if(!card) return scroller.clientWidth * 0.8;
-      return card.getBoundingClientRect().width + parseFloat(getComputedStyle(scroller).gap || 16);
-    };
+      const cardWidth = () => {
+        const card = scroller.querySelector("div > *");
+        if (!card) return scroller.clientWidth * 0.8;
+        return (
+          card.getBoundingClientRect().width +
+          parseFloat(getComputedStyle(scroller).gap || 16)
+        );
+      };
 
-    next?.addEventListener('click', ()=> scroller.scrollBy({ left: cardWidth(), behavior: 'smooth' }));
-    prev?.addEventListener('click', ()=> scroller.scrollBy({ left: -cardWidth(), behavior: 'smooth' }));
+      next?.addEventListener("click", () =>
+        scroller.scrollBy({ left: cardWidth(), behavior: "smooth" }),
+      );
+      prev?.addEventListener("click", () =>
+        scroller.scrollBy({ left: -cardWidth(), behavior: "smooth" }),
+      );
 
-    // show/hide buttons based on overflow
-    const updateButtons = ()=>{
-      if(!next || !prev) return;
-      const isOverflowing = scroller.scrollWidth > scroller.clientWidth + 1;
-      next.style.display = isOverflowing ? 'inline-flex' : 'none';
-      prev.style.display = isOverflowing ? 'inline-flex' : 'none';
-    };
-    window.addEventListener('resize', updateButtons);
-    updateButtons();
+      // show/hide buttons based on overflow
+      const updateButtons = () => {
+        if (!next || !prev) return;
+        const isOverflowing = scroller.scrollWidth > scroller.clientWidth + 1;
+        next.style.display = isOverflowing ? "inline-flex" : "none";
+        prev.style.display = isOverflowing ? "inline-flex" : "none";
+      };
+      window.addEventListener("resize", updateButtons);
+      updateButtons();
 
-    // Autoplay
-    let autoplayInterval = 3500;
-    let timer = null;
-    const start = ()=> {
-      if(timer) return;
-      timer = setInterval(()=> {
-        const maxScroll = scroller.scrollWidth - scroller.clientWidth;
-        if(Math.round(scroller.scrollLeft) >= Math.round(maxScroll)) {
-          scroller.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          scroller.scrollBy({ left: cardWidth(), behavior: 'smooth' });
+      // Autoplay
+      let autoplayInterval = 3500;
+      let timer = null;
+      const start = () => {
+        if (timer) return;
+        timer = setInterval(() => {
+          const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+          if (Math.round(scroller.scrollLeft) >= Math.round(maxScroll)) {
+            scroller.scrollTo({ left: 0, behavior: "smooth" });
+          } else {
+            scroller.scrollBy({ left: cardWidth(), behavior: "smooth" });
+          }
+        }, autoplayInterval);
+      };
+      const stop = () => {
+        if (timer) {
+          clearInterval(timer);
+          timer = null;
         }
-      }, autoplayInterval);
-    };
-    const stop = ()=> { if(timer) { clearInterval(timer); timer = null; } };
+      };
 
-    // start autoplay on load, pause on hover/focus
-    start();
-    scroller.addEventListener('mouseenter', stop);
-    scroller.addEventListener('focusin', stop);
-    scroller.addEventListener('mouseleave', start);
+      // start autoplay on load, pause on hover/focus
+      start();
+      scroller.addEventListener("mouseenter", stop);
+      scroller.addEventListener("focusin", stop);
+      scroller.addEventListener("mouseleave", start);
 
-    // pause when user manually scrolls (short)
-    let isUserScrolling = false;
-    scroller.addEventListener('wheel', ()=> { stop(); isUserScrolling = true; clearTimeout(scroller._usr); scroller._usr = setTimeout(()=> { isUserScrolling=false; start(); }, 2000); }, { passive: true });
-  })();
+      // pause when user manually scrolls (short)
+      let isUserScrolling = false;
+      scroller.addEventListener(
+        "wheel",
+        () => {
+          stop();
+          isUserScrolling = true;
+          clearTimeout(scroller._usr);
+          scroller._usr = setTimeout(() => {
+            isUserScrolling = false;
+            start();
+          }, 2000);
+        },
+        { passive: true },
+      );
+    })();
   </script>
 </section>
